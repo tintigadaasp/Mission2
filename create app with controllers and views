@@ -1,0 +1,124 @@
+Step 1 — Create Project
+Open Visual Studio 2019.
+1. Create a new project.
+2. Select ASP.NET Web Application (.NET Framework).
+3. Project name: StudentMVC
+4. Select .NET Framework 4.7.2.
+5. Select MVC template.
+6. Authentication: No Authentication.
+7. Click Create.     Practical9
+Step 2 — Modify HomeController
+Open:
+Controllers → HomeController.cs
+Add this method inside HomeController:
+public ActionResult Student()
+{
+    ViewBag.Name = "Rahul";
+    ViewBag.Course = "B.Sc. Information Technology";
+    ViewBag.RollNo = 101;
+    return View();
+}
+
+The Controller sends Name, Course and Roll Number to the View using ViewBag.     Practical9
+Step 3 — Create Student View
+Right-click inside the Student() method → Add View
+Enter:
+- View name: Student
+- Template: Empty (without model)
+Click Add.
+It creates:
+Views → Home → Student.cshtml     Practical9
+Step 4 — Add View Code
+Open:
+Views/Home/Student.cshtml
+Replace the code with:
+@{
+    ViewBag.Title = "Student Information";
+}
+
+<h2>Student Information</h2>
+
+<p><strong>Name:</strong> @ViewBag.Name</p>
+<p><strong>Roll Number:</strong> @ViewBag.RollNo</p>
+<p><strong>Course:</strong> @ViewBag.Course</p>
+
+Step 5 — Run
+Press Ctrl + F5.
+Open:
+/Home/Student
+
+Example:
+https://localhost:xxxxx/Home/Student
+
+Output
+Student Information
+
+Name: Rahul
+Roll Number: 101
+Course: B.Sc. Information Technology
+
+The PDF explains that /Home/Student maps to:
+HomeController → Student() → Views/Home/Student.cshtml.     Practical9
+Part 6 — Create Second Controller
+Right-click:
+Controllers → Add → Controller
+Select:
+MVC 5 Controller - Empty
+Name:
+StudentController
+Click Add.     Practical9
+Replace the code with:
+using System.Web.Mvc;
+
+namespace StudentMVC.Controllers
+{
+    public class StudentController : Controller
+    {
+        public ActionResult Index()
+        {
+            ViewBag.Message = "Welcome to Student Management";
+            return View();
+        }
+
+        public ActionResult Details()
+        {
+            ViewBag.Name = "Priya";
+            ViewBag.Course = "B.Sc. Information Technology";
+            ViewBag.RollNo = 102;
+            return View();
+        }
+    }
+}
+
+Step 7 — Create Details View
+Right-click inside:
+public ActionResult Details()
+
+Select Add View.
+- View name: Details
+- Template: Empty (without model)
+Click Add.
+Open:
+Views/Student/Details.cshtml
+Add:
+@{
+    ViewBag.Title = "Student Details";
+}
+
+<h2>Student Details</h2>
+
+<p>Name: @ViewBag.Name</p>
+<p>Roll Number: @ViewBag.RollNo</p>
+<p>Course: @ViewBag.Course</p>
+
+    Practical9
+Step 8 — Run Second Controller
+Run the application and open:
+/Student/Details
+
+Output
+Student Details
+
+Name: Priya
+Roll Number: 102
+Course: B.Sc. Information Technology
