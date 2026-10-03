@@ -1,47 +1,33 @@
-Step 1: Open Visual Studio 2019
+Step 1 — Open Visual Studio
 1. Open Visual Studio 2019.
-2. On the start screen, click:
+2. Click:
 Create a new project
-Step 2: Select Project Template
-You will see the Create a new project window.
-1. In the search box, type:
+Step 2 — Select Project
+1. Search:
 ASP.NET Core Web App
 
-2. Select:
-ASP.NET Core Web App
-3. Click:
-Next
-Step 3: Configure the Project
-Enter the following:
-Project Name:
-HelloWebApp
+2. Select it.
+3. Click Next.
+Step 3 — Configure Project
+Enter:
+Field	Value
+Project Name	HelloWebApp
+Location	Choose your folder
 
-Choose any suitable location where you want to save the project.
-Then click:
-Create
-Step 4: Choose Framework
-You will get the ASP.NET Core project configuration screen.
+
+Click Create.
+Step 4 — Choose Framework
 Select:
 - .NET Core
 - Desired framework version
 - Web Application (Model-View-Controller) or Empty
-Then click:
-Create
-Visual Studio will create the project automatically.     prac 1
-Part B — Display "Hello World"
-Now we will modify the application so that it displays:
-Hello World from ASP.NET Core!
-
-Step 5: Open HomeController
-In Solution Explorer, find:
-Controllers
-    └── HomeController.cs
-
+Click Create.     prac 1
+Step 5 — Display Hello World
 Open:
-HomeController.cs
+Controllers
+   → HomeController.cs
 
-Step 6: Modify the Controller
-Replace/add the Index() action with:
+Replace the code with:
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelloWebApp.Controllers
@@ -55,47 +41,23 @@ namespace HelloWebApp.Controllers
     }
 }
 
-Important
-The important line is:
-return Content("Hello World from ASP.NET Core!");
-
-It directly sends the text to the browser.
-Part C — Run the Application
-Step 7: Save the Project
-Press:
-Ctrl + S
-
-or select:
-File → Save All
-Step 8: Run the Application
+Save the file.
+Step 6 — Run the Application
 Press:
 F5
 
 or click:
 IIS Express
-Visual Studio will build the project and open the browser automatically.     prac 1
-Step 9: Expected Output
-Your browser should display:
-Hello World from ASP.NET Core!
-
 Output
 Hello World from ASP.NET Core!
-Take a screenshot of this output.
-Part D — Create a Simple Form
-Now the second part of Practical 1 is to create a form that accepts a user's name.
-For example, if you enter:
-John
 
-the application should display:
-Welcome John
-
-The PDF implements this using a GET Index() action, a POST Index(string name) action, and a Razor view.     prac 1
-Step 10: Modify HomeController
+    prac 1
+Step 7 — Create Simple Form
 Open:
 Controllers
-    → HomeController.cs
+   → HomeController.cs
 
-Replace the previous controller code with:
+Replace the previous code with:
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelloWebApp.Controllers
@@ -116,40 +78,12 @@ namespace HelloWebApp.Controllers
     }
 }
 
-Step 11: Understand the Controller Code
-There are now two Index methods.
-First method
-public IActionResult Index()
-{
-    return View();
-}
-
-This displays the form.
-Second method
-[HttpPost]
-public IActionResult Index(string name)
-{
-    ViewBag.Message = "Welcome " + name;
-    return View();
-}
-
-This receives the name submitted from the form.
-For example:
-name = John
-
-The following code:
-ViewBag.Message = "Welcome " + name;
-
-creates:
-Welcome John
-
-Step 12: Open/Create the View
-Go to:
+Step 8 — Edit the View
+Open:
 Views
    → Home
       → Index.cshtml
 
-Open Index.cshtml.
 Replace its contents with:
 <form method="post">
 
@@ -166,62 +100,24 @@ Replace its contents with:
     <h2>@ViewBag.Message</h2>
 }
 
-Step 13: Save the Project
-Press:
-Ctrl + S
-
-or:
-Ctrl + Shift + S
-
-if required.
-Step 14: Run the Application
+Save the file.     prac 1
+Step 9 — Run the Application
 Press:
 F5
-
-or click:
-IIS Express
-The browser will open.
-Step 15: Enter Name
-You will see:
-Name: [             ]
-
-        Submit
 
 Enter:
 John
 
-Then click:
-Submit
-Step 16: Expected Output
-The page should display:
-Welcome John
-
-Final Output
-Name: John
-
-Welcome John
-
-This is the expected output shown in the practical PDF.     prac 1
-Part E — Manual Testing
-The PDF specifies checking these four things:     prac 1
-Test 1 — Application starts
-Run the application using:
-F5
-
-It should open in the browser.
-✅ Pass
-Test 2 — Home page loads
-Open the application.
-The home page should load without an error.
-✅ Pass
-Test 3 — Form accepts input
-Enter:
-John
-
+in the Name field.
 Click:
 Submit
-
-✅ Pass
-Test 4 — Correct message displayed
-The application should display:
+Output
 Welcome John
+
+    prac 1
+Step 10 — Testing
+Verify:
+- Application starts ✅
+- Home page loads ✅
+- Form accepts input ✅
+- Correct message is displayed ✅
