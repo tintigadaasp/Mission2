@@ -1,0 +1,216 @@
+Step 1 — Create Project
+Open Visual Studio 2019.
+1. Create a new project
+2. Select ASP.NET Web Application (.NET Framework)
+3. Project name: StudentRegistration
+4. Select .NET Framework 4.7.2
+5. Select MVC
+6. Authentication: No Authentication
+7. Click Create.     Practical10
+Step 2 — Create Student Model
+Right-click:
+Models → Add → Class
+Name:
+Student.cs
+Add:
+using System.ComponentModel.DataAnnotations;
+
+namespace StudentRegistration.Models
+{
+    public class Student
+    {
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+
+        [Required]
+        public string Gender { get; set; }
+
+        [Required]
+        public string Course { get; set; }
+
+        public bool Agree { get; set; }
+    }
+}
+
+The [Required] attributes are used for validation.     Practical10
+Step 3 — Create Student Controller
+Right-click:
+Controllers → Add → Controller
+Select:
+MVC 5 Controller - Empty
+Name:
+StudentController
+Replace the code with:
+using System.Web.Mvc;
+using StudentRegistration.Models;
+
+namespace StudentRegistration.Controllers
+{
+    public class StudentController : Controller
+    {
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Register(Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                ViewBag.Message = "Student registered successfully!";
+            }
+
+            return View(student);
+        }
+    }
+}
+
+The first Register() displays the form, while the [HttpPost] method receives the submitted data.     Practical10
+Step 4 — Create Register View
+Right-click inside:
+public ActionResult Register()
+
+Select Add View.
+Set:
+- View name: Register
+- Template: Empty
+- Model class: Student
+Click Add.
+It creates:
+Views/Student/Register.cshtml     Practical10
+Step 5 — Add Registration Form
+Open:
+Views/Student/Register.cshtml
+Add:
+@model StudentRegistration.Models.Student
+
+@{
+    ViewBag.Title = "Student Registration";
+}
+
+<h2>Student Registration</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name)
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
+
+    <br />
+
+    <div>
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email)
+        @Html.ValidationMessageFor(m => m.Email)
+    </div>
+
+    <br />
+
+    <div>
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password)
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+
+    <br />
+
+    <div>
+        @Html.LabelFor(m => m.Gender)
+        @Html.RadioButtonFor(m => m.Gender, "Male")
+        Male
+
+        @Html.RadioButtonFor(m => m.Gender, "Female")
+        Female
+    </div>
+
+    <br />
+
+    <div>
+        @Html.LabelFor(m => m.Course)
+
+        @Html.DropDownListFor(
+            m => m.Course,
+            new SelectList(new[]
+            {
+                "BSc Data Science",
+                "BSc IT",
+                "BCA",
+                "MCA"
+            }),
+            "Select Course"
+        )
+    </div>
+
+    <br />
+
+    <div>
+        @Html.CheckBoxFor(m => m.Agree)
+        I agree to the terms and conditions.
+    </div>
+
+    <br />
+
+    <input type="submit" value="Register" />
+}
+
+@if (ViewBag.Message != null)
+{
+    <h3>@ViewBag.Message</h3>
+}
+
+Step 6 — Run Application
+Press Ctrl + F5.
+Open:
+/Student/Register
+
+Example:
+https://localhost:xxxxx/Student/Register
+
+You should see:
+Student Registration
+
+Name:     [             ]
+Email:    [             ]
+Password: [             ]
+
+Gender: ○ Male  ○ Female
+
+Course: [Select Course ▼]
+
+☐ I agree to the terms and conditions.
+
+[ Register ]
+
+    Practical10
+Step 7 — Test Registration
+Enter:
+Name     : Rahul
+Email    : rahul@gmail.com
+Password : 12345
+Gender   : Male
+Course   : BSc Data Science
+Agree    : ✓
+
+Click Register.
+Output
+Student registered successfully!
+
+The PDF specifies this successful submission result.     Practical10
+Step 8 — Test Validation
+Run the application again and click Register without entering the required fields.
+Validation messages should appear, such as:
+Name is required.
+Email is required.
+Password is required.
+Course is required.
+
+These validations come from the [Required] attributes in Student.cs.
