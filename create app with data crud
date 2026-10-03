@@ -1,0 +1,228 @@
+Step 1 — Create New Project
+1. Open Visual Studio 2019.
+2. Click Create a new project.
+3. Select:
+ASP.NET Web Application (.NET Framework)
+
+4. Click Next.
+Step 2 — Configure Project
+Enter:
+Field	Value
+Project Name	StudentCRUD
+Location	Choose folder
+Framework	.NET Framework 4.7.2
+
+
+Click Create.
+Step 3 — Select MVC
+Select:
+MVC
+
+Authentication:
+No Authentication
+
+Click Create.     Practical 3
+Step 4 — Run the Application
+Press:
+Ctrl + F5
+
+The default MVC application should open.
+Step 5 — Install Entity Framework 6
+Open:
+Tools
+→ NuGet Package Manager
+→ Package Manager Console
+
+Run:
+Install-Package EntityFramework
+
+Wait until the installation completes.     Practical 3
+Step 6 — Create Student Model
+1. Right-click Models.
+2. Select:
+Add → Class
+
+3. Name it:
+Student.cs
+
+4. Add:
+using System.ComponentModel.DataAnnotations;
+
+namespace StudentCRUD.Models
+{
+    public class Student
+    {
+        [Key]
+        public int StudentId { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Name { get; set; }
+
+        [Range(18, 60)]
+        public int Age { get; set; }
+
+        [StringLength(50)]
+        public string Course { get; set; }
+    }
+}
+
+    Practical 3
+Step 7 — Create Database Context
+1. Right-click Models.
+2. Select:
+Add → Class
+
+3. Name it:
+StudentContext.cs
+
+4. Add:
+using System.Data.Entity;
+
+namespace StudentCRUD.Models
+{
+    public class StudentContext : DbContext
+    {
+        public StudentContext()
+            : base("StudentConnection")
+        {
+        }
+
+        public DbSet<Student> Students
+        {
+            get;
+            set;
+        }
+    }
+}
+
+    Practical 3
+Step 8 — Configure Connection String
+Open:
+Web.config
+
+Inside <configuration>, add:
+<connectionStrings>
+    <add name="StudentConnection"
+         connectionString="Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=StudentDB;Integrated Security=True"
+         providerName="System.Data.SqlClient"/>
+</connectionStrings>
+
+    Practical 3
+Step 9 — Enable Migrations
+Open:
+Tools → NuGet Package Manager → Package Manager Console
+Run:
+Enable-Migrations
+
+A Migrations folder will be created.
+Step 10 — Create Migration
+In Package Manager Console, run:
+Add-Migration InitialCreate
+
+Step 11 — Create Database
+Run:
+Update-Database
+
+This creates:
+StudentDB
+
+and the:
+Students
+
+table.     Practical 3
+Step 12 — Verify Database
+Open:
+View
+→ SQL Server Object Explorer
+
+Expand:
+(localdb)\MSSQLLocalDB
+    ↓
+StudentDB
+    ↓
+Tables
+    ↓
+dbo.Students
+
+    Practical 3
+Step 13 — Create Controller
+1. Right-click Controllers.
+2. Select:
+Add → Controller
+
+3. Select:
+MVC 5 Controller with views, using Entity Framework
+
+4. Click Add.
+Step 14 — Configure Controller
+Set:
+Option	Value
+Model Class	Student
+Data Context Class	StudentContext
+Controller Name	StudentsController
+
+
+Click Add.
+Visual Studio will automatically create the CRUD views:
+Views
+└── Students
+    ├── Create.cshtml
+    ├── Edit.cshtml
+    ├── Delete.cshtml
+    ├── Details.cshtml
+    └── Index.cshtml
+
+    Practical 3
+Step 15 — Run Application
+Press:
+Ctrl + F5
+
+Open:
+/Students
+
+For example:
+https://localhost:44300/Students
+
+    Practical 3
+Step 16 — Create Student
+Click:
+Create New
+Enter:
+Field	Value
+Name	Amit
+Age	20
+Course	BSc IT
+
+
+Click:
+Create
+Output
+The student will appear in the list:
+ID    Name    Age    Course
+1     Amit    20     BSc IT
+
+This is the Create operation.     Practical 3
+Step 17 — Read Student
+The Index page displays the student records.
+Example:
+ID    Name    Age    Course
+1     Amit    20     BSc IT
+
+This is the Read operation.
+Step 18 — Edit Student
+1. Click Edit beside Amit.
+2. Change:
+Age: 20 → 21
+
+3. Click Save.
+Output:
+ID    Name    Age    Course
+1     Amit    21     BSc IT
+
+This is the Update operation.     Practical 3
+Step 19 — Delete Student
+1. Click Delete beside Amit.
+2. Click Delete again to confirm.
+The student record will be removed.
+This is the Delete operation.     Practical 3
