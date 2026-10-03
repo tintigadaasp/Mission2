@@ -1,0 +1,116 @@
+Step 1: Create the Project
+1. Open Visual Studio 2019.
+2. Click Create a new project.
+3. Select ASP.NET Web Application (.NET Framework).
+4. Click Next.
+5. Project Name:SecureMVCApp
+6. Click Create.
+7. Select:
+   - ASP.NET Core Web App (Model-View-Controller)
+   - Change Authentication → Individual User Accounts
+8. Click Create.
+Visual Studio automatically creates the Identity database, Login, Registration, Logout and Identity models.     Practical 5
+Step 2: Run the Application
+Press:
+Ctrl + F5
+
+The home page should open.
+At the top-right, you should see:
+Register
+Login
+
+Step 3: Register a User
+Click Register.
+Enter:
+Email: student@gmail.com
+Password: Student@123
+Confirm Password: Student@123
+
+Click Register.
+The user is saved in the AspNetUsers table.     Practical 5
+Step 4: Verify the User
+Go to:
+View → Server Explorer
+Open:
+Data Connections
+→ DefaultConnection
+→ Tables
+→ AspNetUsers
+
+Right-click AspNetUsers → View Data.
+You should see the registered user.
+Step 5: Create Secure Controller
+Right-click:
+Controllers
+→ Add
+→ Controller
+
+Create:
+StudentController.cs
+
+Use:
+using System.Web.Mvc;
+
+namespace SecureMVCApp.Controllers
+{
+    [Authorize]
+    public class StudentController : Controller
+    {
+        public ActionResult Index()
+        {
+            return View();
+        }
+    }
+}
+
+The important part is:
+[Authorize]
+
+It protects the controller so that only logged-in users can access it.     Practical 5
+Step 6: Create Student View
+Create:
+Views
+→ Student
+→ Index.cshtml
+
+Add:
+<h2>Student Dashboard</h2>
+
+<h3>Only logged-in users can see this page.</h3>
+
+Step 7: Test Authorization
+Run the project and open:
+/Student
+
+Without Login
+You are redirected to the Login Page.
+After Login
+The page displays:
+Student Dashboard
+
+Only logged-in users can see this page.
+
+    Practical 5
+Step 8: Protect Only One Action
+If only one action needs protection, use [Authorize] on that action:
+public class StudentController : Controller
+{
+    public ActionResult About()
+    {
+        return View();
+    }
+
+    [Authorize]
+    public ActionResult Result()
+    {
+        return View();
+    }
+}
+
+Now:
+/Student/About
+
+→ Accessible without login.
+/Student/Result
+
+→ Login required.     Practical 5
