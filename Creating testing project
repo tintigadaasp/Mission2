@@ -1,0 +1,127 @@
+Step 1 — Create ASP.NET Core Project
+1. Open Visual Studio 2019.
+2. Click Create a new project.
+3. Select ASP.NET Core Web Application.
+4. Click Next.
+5. Project Name:
+StudentManagement
+
+6. Click Create.
+7. Select:
+ASP.NET Core Web Application (Model-View-Controller)
+
+8. Click Create.     Practical 2(1)
+Step 2 — Add Test Project
+1. Right-click the Solution.
+2. Select:
+Add → New Project
+
+3. Search:
+xUnit Test Project (.NET Core)
+
+4. Select it.
+5. Click Next.
+6. Project Name:
+StudentManagement.Tests
+
+7. Click Create.
+You should now have:
+StudentManagement
+StudentManagement.Tests
+
+    Practical 2(1)
+Step 3 — Add Project Reference
+1. Right-click:
+StudentManagement.Tests
+
+2. Select:
+Add → Project Reference
+
+3. Tick:
+StudentManagement
+
+4. Click OK.     Practical 2(1)
+Step 4 — Install Required Packages
+Right-click:
+StudentManagement.Tests
+
+Select:
+Manage NuGet Packages
+Install these three:
+xunit
+xunit.runner.visualstudio
+Microsoft.NET.Test.Sdk
+
+    Practical 2(1)
+Step 5 — Create Calculator Class
+In the StudentManagement project:
+1. Right-click the project.
+2. Select:
+Add → Class
+
+3. Name it:
+Calculator.cs
+
+4. Add:
+namespace StudentManagement
+{
+    public class Calculator
+    {
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+
+        public int Multiply(int a, int b)
+        {
+            return a * b;
+        }
+    }
+}
+
+    Practical 2(1)
+Step 6 — Create Test Class
+Inside:
+StudentManagement.Tests
+
+1. Right-click the project.
+2. Select:
+Add → Class
+
+3. Name it:
+CalculatorTests.cs
+
+4. Add:
+using Xunit;
+using StudentManagement;
+
+namespace StudentManagementTests
+{
+    public class CalculatorTests
+    {
+        [Fact]
+        public void Add_TwoNumbers_ReturnsSum()
+        {
+            Calculator c = new Calculator();
+
+            int result = c.Add(10, 20);
+
+            Assert.Equal(30, result);
+        }
+    }
+}
+
+    Practical 2(1)
+Step 7 — Run the Test
+1. Go to:
+Test → Test Explorer
+
+2. Click:
+Run All
+Step 8 — Expected Output
+You should get:
+Passed: 1
+Failed: 0
+Skipped: 0
+
+The test should have a green check mark.     Practical 2(1)
