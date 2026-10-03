@@ -1,0 +1,266 @@
+Step 1: Create Project
+Open Visual Studio 2019.
+Select:
+Create a new project → ASP.NET Web Application (.NET Framework)
+Enter:
+Project Name: URLRoutingDemo
+Framework: .NET Framework 4.7.2
+
+Select:
+MVC
+No Authentication
+
+Click Create.     Practical 6(1)
+Step 2: Create StudentController
+Right-click:
+Controllers
+→ Add
+→ Controller
+→ MVC 5 Controller - Empty
+
+Name:
+StudentController
+
+Replace the code with:
+using System.Web.Mvc;
+
+namespace URLRoutingDemo.Controllers
+{
+    public class StudentController : Controller
+    {
+        public ActionResult Index()
+        {
+            return Content("Welcome to Student Page");
+        }
+
+        public ActionResult Details(int id)
+        {
+            return Content("Student ID is: " + id);
+        }
+    }
+}
+
+    Practical 6(1)
+Step 3: Test URL Routing
+Press:
+Ctrl + F5
+
+Your port number may be different.
+Open:
+https://localhost:PORT/Student/Index
+
+Output
+Welcome to Student Page
+
+Now open:
+https://localhost:PORT/Student/Details/101
+
+Output
+Student ID is: 101
+
+    Practical 6(1)
+Part B — Dependency Injection
+Step 4: Create Project
+Create another:
+ASP.NET Web Application (.NET Framework)
+Enter:
+Project Name: DependencyInjectionDemo
+Framework: .NET Framework 4.7.2
+
+Select:
+MVC
+No Authentication
+
+Click Create.     Practical 6(1)
+Step 5: Install Ninject
+Go to:
+Tools → NuGet Package Manager → Package Manager Console
+Run:
+Install-Package Ninject.MVC5
+
+If required, install:
+Install-Package Ninject
+Install-Package Ninject.Web.Common
+Install-Package Ninject.Web.Mvc
+
+    Practical 6(1)
+Step 6: Create IStudentService.cs
+Right-click:
+Models
+→ Add
+→ Class
+
+Name:
+IStudentService.cs
+
+Code:
+using System.Collections.Generic;
+
+namespace DependencyInjectionDemo.Models
+{
+    public interface IStudentService
+    {
+        List<string> GetStudents();
+    }
+}
+
+    Practical 6(1)
+Step 7: Create StudentService.cs
+Create another class inside Models:
+StudentService.cs
+
+Code:
+using System.Collections.Generic;
+
+namespace DependencyInjectionDemo.Models
+{
+    public class StudentService : IStudentService
+    {
+        public List<string> GetStudents()
+        {
+            return new List<string>
+            {
+                "Rahul",
+                "Priya",
+                "Amit",
+                "Sneha"
+            };
+        }
+    }
+}
+
+    Practical 6(1)
+Step 8: Create StudentController.cs
+Create:
+Controllers
+→ Add
+→ Controller
+→ MVC 5 Controller - Empty
+
+Name:
+StudentController
+
+Code:
+using System.Web.Mvc;
+using DependencyInjectionDemo.Models;
+
+namespace DependencyInjectionDemo.Controllers
+{
+    public class StudentController : Controller
+    {
+        private readonly IStudentService studentService;
+
+        public StudentController(IStudentService studentService)
+        {
+            this.studentService = studentService;
+        }
+
+        public ActionResult Index()
+        {
+            var students = studentService.GetStudents();
+            return View(students);
+        }
+    }
+}
+
+This uses constructor injection.     Practical 6(1)
+Step 9: Create NinjectConfig.cs
+Inside:
+App_Start
+→ Add
+→ Class
+
+Name:
+NinjectConfig.cs
+
+Code:
+using Ninject;
+using Ninject.Web.Mvc;
+using System.Web.Mvc;
+using DependencyInjectionDemo.Models;
+
+namespace DependencyInjectionDemo.App_Start
+{
+    public static class NinjectConfig
+    {
+        public static void RegisterDependencies()
+        {
+            IKernel kernel = new StandardKernel();
+
+            kernel.Bind<IStudentService>()
+                  .To<StudentService>();
+
+            DependencyResolver.SetResolver(
+                new NinjectDependencyResolver(kernel)
+            );
+        }
+    }
+}
+
+    Practical 6(1)
+Step 10: Modify Global.asax.cs
+Add:
+using DependencyInjectionDemo.App_Start;
+
+Inside Application_Start() add:
+NinjectConfig.RegisterDependencies();
+
+So the important part becomes:
+protected void Application_Start()
+{
+    AreaRegistration.RegisterAllAreas();
+    FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+    RouteConfig.RegisterRoutes(RouteTable.Routes);
+    BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+    NinjectConfig.RegisterDependencies();
+}
+
+    Practical 6(1)
+Step 11: Create Index View
+Go to:
+Views
+→ Student
+→ Index.cshtml
+
+Add:
+@model List<string>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student List</title>
+</head>
+<body>
+
+<h2>Student List</h2>
+
+<ul>
+    @foreach (var student in Model)
+    {
+        <li>@student</li>
+    }
+</ul>
+
+</body>
+</html>
+
+    Practical 6(1)
+Step 12: Build and Run
+Go to:
+Build → Build Solution
+Then press:
+Ctrl + F5
+
+Open:
+https://localhost:PORT/Student/Index
+
+Output
+Student List
+
+• Rahul
+• Priya
+• Amit
+• Sneha
+
+    Practical 6(1)
