@@ -1,0 +1,306 @@
+Step 1 — Create New Project
+1. Open Visual Studio 2019.
+2. Click Create a new project.
+3. Select:
+ASP.NET Web Application (.NET Framework)
+
+4. Click Next.
+Step 2 — Configure Project
+Enter:
+Field	Value
+Project Name	ShoppingCartApp
+Location	Choose folder
+Framework	.NET Framework 4.7.2
+
+
+Click Create.
+Step 3 — Select MVC
+Select:
+MVC
+
+Authentication:
+No Authentication
+
+Click Create.     Practical 4(1)
+Step 4 — Create Product Model
+1. Right-click Models.
+2. Select:
+Add → Class
+
+3. Name:
+Product.cs
+
+4. Add:
+namespace ShoppingCartApp.Models
+{
+    public class Product
+    {
+        public int ProductID { get; set; }
+        public string ProductName { get; set; }
+        public decimal Price { get; set; }
+    }
+}
+
+Save.
+Step 5 — Create CartItem Model
+1. Right-click Models.
+2. Select:
+Add → Class
+
+3. Name:
+CartItem.cs
+
+4. Add:
+namespace ShoppingCartApp.Models
+{
+    public class CartItem
+    {
+        public Product Product { get; set; }
+        public int Quantity { get; set; }
+    }
+}
+
+Save.     Practical 4(1)
+Step 6 — Create HomeController
+1. Right-click Controllers.
+2. Select:
+Add → Controller
+
+3. Select:
+MVC 5 Controller - Empty
+
+4. Name:
+HomeController
+
+5. Click Add.
+Step 7 — Add Product List
+Open HomeController.cs and use:
+using System.Collections.Generic;
+using System.Web.Mvc;
+using ShoppingCartApp.Models;
+
+namespace ShoppingCartApp.Controllers
+{
+    public class HomeController : Controller
+    {
+        public ActionResult Index()
+        {
+            List<Product> products = new List<Product>()
+            {
+                new Product { ProductID = 1, ProductName = "Laptop", Price = 55000 },
+                new Product { ProductID = 2, ProductName = "Mouse", Price = 600 },
+                new Product { ProductID = 3, ProductName = "Keyboard", Price = 1500 },
+                new Product { ProductID = 4, ProductName = "Monitor", Price = 12000 }
+            };
+
+            return View(products);
+        }
+    }
+}
+
+Build the project:
+Ctrl + Shift + B
+
+Make sure there are no errors.     Practical 4(1)
+Step 8 — Create Product View
+Open:
+Views → Home → Index.cshtml
+
+Use:
+@model IEnumerable<ShoppingCartApp.Models.Product>
+
+<h2>Products</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ProductID</td>
+            <td>@item.ProductName</td>
+            <td>@item.Price</td>
+            <td>
+                @Html.ActionLink("Add To Cart", "AddToCart", "Cart",
+                    new { id = item.ProductID }, null)
+            </td>
+        </tr>
+    }
+</table>
+
+Step 9 — Create CartController
+1. Right-click Controllers.
+2. Select:
+Add → Controller
+
+3. Select:
+MVC 5 Controller - Empty
+
+4. Name:
+CartController
+
+5. Click Add.
+Step 10 — Add Namespaces
+At the top of CartController.cs:
+using ShoppingCartApp.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+
+Step 11 — Add AddToCart Method
+Inside CartController, add:
+public ActionResult AddToCart(int id)
+{
+    List<Product> products = new List<Product>()
+    {
+        new Product { ProductID = 1, ProductName = "Laptop", Price = 55000 },
+        new Product { ProductID = 2, ProductName = "Mouse", Price = 600 },
+        new Product { ProductID = 3, ProductName = "Keyboard", Price = 1500 },
+        new Product { ProductID = 4, ProductName = "Monitor", Price = 12000 }
+    };
+
+    Product product = products.FirstOrDefault(x => x.ProductID == id);
+
+    List<CartItem> cart;
+
+    if (Session["Cart"] == null)
+    {
+        cart = new List<CartItem>();
+    }
+    else
+    {
+        cart = (List<CartItem>)Session["Cart"];
+    }
+
+    CartItem item = cart.FirstOrDefault(
+        x => x.Product.ProductID == id);
+
+    if (item == null)
+    {
+        cart.Add(new CartItem()
+        {
+            Product = product,
+            Quantity = 1
+        });
+    }
+    else
+    {
+        item.Quantity++;
+    }
+
+    Session["Cart"] = cart;
+
+    return RedirectToAction("Index", "Home");
+}
+
+This adds the selected product to the session cart. Adding the same product again increases its quantity. 
+Step 12 — Add Cart Index Action
+Below AddToCart(), add:
+public ActionResult Index()
+{
+    List<CartItem> cart;
+
+    if (Session["Cart"] == null)
+    {
+        cart = new List<CartItem>();
+    }
+    else
+    {
+        cart = (List<CartItem>)Session["Cart"];
+    }
+
+    return View(cart);
+}
+
+Step 13 — Create Cart View
+Right-click the Index() action and select:
+Add View
+
+Use:
+View Name: Index
+Template: Empty
+
+Click Add.
+Step 14 — Display Cart
+Use the following in the Cart Index.cshtml:
+@model IEnumerable<ShoppingCartApp.Models.CartItem>
+
+<h2>Shopping Cart</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Product.ProductName</td>
+            <td>@item.Product.Price</td>
+            <td>@item.Quantity</td>
+            <td>@(item.Product.Price * item.Quantity)</td>
+        </tr>
+    }
+</table>
+
+<h3>
+    Grand Total:
+    @Model.Sum(x => x.Product.Price * x.Quantity)
+</h3>
+
+Step 15 — Add Cart Link
+Open:
+Views
+→ Shared
+→ _Layout.cshtml
+
+Inside the navigation menu, add:
+<li>
+    @Html.ActionLink("Cart", "Index", "Cart")
+</li>
+
+    Practical 4(1)
+Step 16 — Run Application
+Press:
+F5
+
+The Products page should display:
+Product	Price
+Laptop	55000
+Mouse	600
+Keyboard	1500
+Monitor	12000
+
+
+Each product should have Add To Cart.     Practical 4(1)
+Step 17 — Test Shopping Cart
+Click:
+Add To Cart for Laptop.
+Then click:
+Cart
+The cart should show:
+Laptop    55000    1    55000
+
+Add Mouse twice.
+The cart should then show:
+Laptop    55000    1    55000
+Mouse       600    2     1200
+
+Final Output
+Shopping Cart
+
+Product    Price    Quantity    Total
+Laptop     55000       1        55000
+Mouse        600       2         1200
+
+Grand Total: 56200
+
+This matches the practical's example output.     Practical 4(1)
