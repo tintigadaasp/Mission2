@@ -51,9 +51,8 @@ StudentController.cs
 Use:
 using System.Web.Mvc;
 
-namespace SecureMVCApp.Controllers
+namespace SecureMVCApp1.Controllers
 {
-    [Authorize]
     public class StudentController : Controller
     {
         public ActionResult Index()
@@ -62,7 +61,6 @@ namespace SecureMVCApp.Controllers
         }
     }
 }
-
 The important part is:
 [Authorize]
 
@@ -74,9 +72,38 @@ Views
 → Index.cshtml
 
 Add:
-<h2>Student Dashboard</h2>
+@{
+    ViewBag.Title = "Student Dashboard";
+}
 
-<h3>Only logged-in users can see this page.</h3>
+<div class="jumbotron">
+    <h2>Student Dashboard</h2>
+
+    <p class="lead">
+        Only logged-in users can see this page.
+    </p>
+
+    <p>
+        Welcome to the Student Dashboard.
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Students</h2>
+        <p>View and manage student information.</p>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Profile</h2>
+        <p>View your profile information.</p>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Account</h2>
+        <p>Manage your account.</p>
+    </div>
+</div>
 
 Step 7: Test Authorization
 Run the project and open:
@@ -86,31 +113,6 @@ Without Login
 You are redirected to the Login Page.
 After Login
 The page displays:
+
 Student Dashboard
-
 Only logged-in users can see this page.
-
-    Practical 5
-Step 8: Protect Only One Action
-If only one action needs protection, use [Authorize] on that action:
-public class StudentController : Controller
-{
-    public ActionResult About()
-    {
-        return View();
-    }
-
-    [Authorize]
-    public ActionResult Result()
-    {
-        return View();
-    }
-}
-
-Now:
-/Student/About
-
-→ Accessible without login.
-/Student/Result
-
-→ Login required.     Practical 5
