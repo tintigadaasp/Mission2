@@ -11,12 +11,27 @@ Step 2 — Modify HomeController
 Open:
 Controllers → HomeController.cs
 Add this method inside HomeController:
-public ActionResult Student()
+
+using System.Web.Mvc;
+
+namespace DependencyInjectionDemo.Controllers
 {
-    ViewBag.Name = "Rahul";
-    ViewBag.Course = "B.Sc. Information Technology";
-    ViewBag.RollNo = 101;
-    return View();
+    public class HomeController : Controller
+    {
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Student()
+        {
+            ViewBag.Name = "Rahul";
+            ViewBag.Course = "B.Sc. Information Technology";
+            ViewBag.RollNo = 101;
+
+            return View();
+        }
+    }
 }
 
 The Controller sends Name, Course and Roll Number to the View using ViewBag.     Practical9
