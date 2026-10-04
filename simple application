@@ -10,33 +10,29 @@ ASP.NET Core Web App
 3. Click Next.
 Step 3 — Configure Project
 Enter:
-Field	Value
-Project Name	HelloWebApp
-Location	Choose your folder
-
-
+Project Name  HelloWebApp
 Click Create.
+
 Step 4 — Choose Framework
-Select:
-- .NET Core
-- Desired framework version
-- Web Application (Model-View-Controller) or Empty
-Click Create.     prac 1
+Select: (Model-View-Controller)
+Click Create.     
+
+
 Step 5 — Display Hello World
 Open:
 Controllers
    → HomeController.cs
 
 Replace the code with:
-using Microsoft.AspNetCore.Mvc;
+using System.Web.Mvc;
 
 namespace HelloWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            return Content("Hello World from ASP.NET Core!");
+            return Content("Hello World from ASP.NET MVC!");
         }
     }
 }
@@ -46,31 +42,28 @@ Step 6 — Run the Application
 Press:
 F5
 
-or click:
-IIS Express
 Output
 Hello World from ASP.NET Core!
 
-    prac 1
 Step 7 — Create Simple Form
 Open:
 Controllers
    → HomeController.cs
 
 Replace the previous code with:
-using Microsoft.AspNetCore.Mvc;
+using System.Web.Mvc;
 
 namespace HelloWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Index(string name)
+        public ActionResult Index(string name)
         {
             ViewBag.Message = "Welcome " + name;
             return View();
@@ -100,24 +93,15 @@ Replace its contents with:
     <h2>@ViewBag.Message</h2>
 }
 
-Save the file.     prac 1
+Save the file.     
 Step 9 — Run the Application
 Press:
 F5
 
 Enter:
-John
-
-in the Name field.
+John in the Name field.
 Click:
 Submit
 Output
 Welcome John
 
-    prac 1
-Step 10 — Testing
-Verify:
-- Application starts ✅
-- Home page loads ✅
-- Form accepts input ✅
-- Correct message is displayed ✅
