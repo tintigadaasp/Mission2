@@ -7,10 +7,9 @@ Step 1 — Create ASP.NET Core Project
 StudentManagement
 
 6. Click Create.
-7. Select:
-ASP.NET Core Web Application (Model-View-Controller)
+7. Select: (Model-View-Controller)
+8. Click Create.    
 
-8. Click Create.     Practical 2(1)
 Step 2 — Add Test Project
 1. Right-click the Solution.
 2. Select:
@@ -29,7 +28,7 @@ You should now have:
 StudentManagement
 StudentManagement.Tests
 
-    Practical 2(1)
+
 Step 3 — Add Project Reference
 1. Right-click:
 StudentManagement.Tests
@@ -40,7 +39,7 @@ Add → Project Reference
 3. Tick:
 StudentManagement
 
-4. Click OK.     Practical 2(1)
+4. Click OK.   
 Step 4 — Install Required Packages
 Right-click:
 StudentManagement.Tests
@@ -52,7 +51,7 @@ xunit
 xunit.runner.visualstudio
 Microsoft.NET.Test.Sdk
 
-    Practical 2(1)
+
 Step 5 — Create Calculator Class
 In the StudentManagement project:
 1. Right-click the project.
@@ -79,7 +78,6 @@ namespace StudentManagement
     }
 }
 
-    Practical 2(1)
 Step 6 — Create Test Class
 Inside:
 StudentManagement.Tests
@@ -111,7 +109,6 @@ namespace StudentManagementTests
     }
 }
 
-    Practical 2(1)
 Step 7 — Run the Test
 1. Go to:
 Test → Test Explorer
@@ -124,4 +121,4 @@ Passed: 1
 Failed: 0
 Skipped: 0
 
-The test should have a green check mark.     Practical 2(1)
+The test should have a green check mark.     
