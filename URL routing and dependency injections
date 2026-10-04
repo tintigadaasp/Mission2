@@ -10,7 +10,7 @@ Select:
 MVC
 No Authentication
 
-Click Create.     Practical 6(1)
+Click Create.    
 Step 2: Create StudentController
 Right-click:
 Controllers
@@ -40,7 +40,6 @@ namespace URLRoutingDemo.Controllers
     }
 }
 
-    Practical 6(1)
 Step 3: Test URL Routing
 Press:
 Ctrl + F5
@@ -200,20 +199,25 @@ namespace DependencyInjectionDemo.App_Start
     Practical 6(1)
 Step 10: Modify Global.asax.cs
 Add:
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
 using DependencyInjectionDemo.App_Start;
 
-Inside Application_Start() add:
-NinjectConfig.RegisterDependencies();
-
-So the important part becomes:
-protected void Application_Start()
+namespace DependencyInjectionDemo
 {
-    AreaRegistration.RegisterAllAreas();
-    FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-    RouteConfig.RegisterRoutes(RouteTable.Routes);
-    BundleConfig.RegisterBundles(BundleTable.Bundles);
+    public class MvcApplication : System.Web.HttpApplication
+    {
+        protected void Application_Start()
+        {
+            AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-    NinjectConfig.RegisterDependencies();
+            NinjectConfig.RegisterDependencies();
+        }
+    }
 }
 
     Practical 6(1)
@@ -223,6 +227,8 @@ Views
 → Student
 → Index.cshtml
 
+if no present 
+Right click on student folder then select view then name Index then,
 Add:
 @model List<string>
 
