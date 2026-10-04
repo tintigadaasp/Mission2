@@ -5,13 +5,8 @@ Step 1 — Create New Project
 ASP.NET Web Application (.NET Framework)
 
 4. Click Next.
-Step 2 — Configure Project
-Enter:
-Field	Value
 Project Name	StudentCRUD
-Location	Choose folder
 Framework	.NET Framework 4.7.2
-
 
 Click Create.
 Step 3 — Select MVC
@@ -21,7 +16,7 @@ MVC
 Authentication:
 No Authentication
 
-Click Create.     Practical 3
+Click Create.   
 Step 4 — Run the Application
 Press:
 Ctrl + F5
@@ -35,17 +30,17 @@ Tools
 
 Run:
 Install-Package EntityFramework
+Wait until the installation completes.    
 
-Wait until the installation completes.     Practical 3
 Step 6 — Create Student Model
 1. Right-click Models.
 2. Select:
 Add → Class
-
 3. Name it:
 Student.cs
 
 4. Add:
+
 using System.ComponentModel.DataAnnotations;
 
 namespace StudentCRUD.Models
@@ -67,7 +62,7 @@ namespace StudentCRUD.Models
     }
 }
 
-    Practical 3
+   
 Step 7 — Create Database Context
 1. Right-click Models.
 2. Select:
@@ -96,7 +91,6 @@ namespace StudentCRUD.Models
     }
 }
 
-    Practical 3
 Step 8 — Configure Connection String
 Open:
 Web.config
@@ -108,12 +102,13 @@ Inside <configuration>, add:
          providerName="System.Data.SqlClient"/>
 </connectionStrings>
 
-    Practical 3
 Step 9 — Enable Migrations
+
 Open:
 Tools → NuGet Package Manager → Package Manager Console
 Run:
 Enable-Migrations
+if error occur change the entire Web config.
 
 A Migrations folder will be created.
 Step 10 — Create Migration
@@ -126,11 +121,9 @@ Update-Database
 
 This creates:
 StudentDB
-
 and the:
-Students
+Studentstable.    
 
-table.     Practical 3
 Step 12 — Verify Database
 Open:
 View
@@ -145,7 +138,6 @@ Tables
     ↓
 dbo.Students
 
-    Practical 3
 Step 13 — Create Controller
 1. Right-click Controllers.
 2. Select:
