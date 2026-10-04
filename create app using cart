@@ -21,7 +21,7 @@ MVC
 Authentication:
 No Authentication
 
-Click Create.     Practical 4(1)
+Click Create.    
 Step 4 — Create Product Model
 1. Right-click Models.
 2. Select:
@@ -72,6 +72,7 @@ MVC 5 Controller - Empty
 4. Name:
 HomeController
 
+
 5. Click Add.
 Step 7 — Add Product List
 Open HomeController.cs and use:
@@ -101,7 +102,7 @@ namespace ShoppingCartApp.Controllers
 Build the project:
 Ctrl + Shift + B
 
-Make sure there are no errors.     Practical 4(1)
+Make sure there are no errors.     
 Step 8 — Create Product View
 Open:
 Views → Home → Index.cshtml
@@ -113,21 +114,24 @@ Use:
 
 <table class="table table-bordered">
     <tr>
-        <th>ID</th>
-        <th>Name</th>
+        <th>Product</th>
         <th>Price</th>
-        <th></th>
+        <th>Action</th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var product in Model)
     {
         <tr>
-            <td>@item.ProductID</td>
-            <td>@item.ProductName</td>
-            <td>@item.Price</td>
+            <td>@product.ProductName</td>
+            <td>@product.Price</td>
             <td>
-                @Html.ActionLink("Add To Cart", "AddToCart", "Cart",
-                    new { id = item.ProductID }, null)
+                @Html.ActionLink(
+                    "Add to Cart",
+                    "AddToCart",
+                    "Cart",
+                    new { id = product.ProductID },
+                    null
+                )
             </td>
         </tr>
     }
@@ -144,117 +148,113 @@ MVC 5 Controller - Empty
 4. Name:
 CartController
 
-5. Click Add.
-Step 10 — Add Namespaces
-At the top of CartController.cs:
+5. replace the whole code:
 using ShoppingCartApp.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-Step 11 — Add AddToCart Method
-Inside CartController, add:
-public ActionResult AddToCart(int id)
+namespace ShoppingCartApp.Controllers
 {
-    List<Product> products = new List<Product>()
+    public class CartController : Controller
     {
-        new Product { ProductID = 1, ProductName = "Laptop", Price = 55000 },
-        new Product { ProductID = 2, ProductName = "Mouse", Price = 600 },
-        new Product { ProductID = 3, ProductName = "Keyboard", Price = 1500 },
-        new Product { ProductID = 4, ProductName = "Monitor", Price = 12000 }
-    };
-
-    Product product = products.FirstOrDefault(x => x.ProductID == id);
-
-    List<CartItem> cart;
-
-    if (Session["Cart"] == null)
-    {
-        cart = new List<CartItem>();
-    }
-    else
-    {
-        cart = (List<CartItem>)Session["Cart"];
-    }
-
-    CartItem item = cart.FirstOrDefault(
-        x => x.Product.ProductID == id);
-
-    if (item == null)
-    {
-        cart.Add(new CartItem()
+        public ActionResult AddToCart(int id)
         {
-            Product = product,
-            Quantity = 1
-        });
-    }
-    else
-    {
-        item.Quantity++;
-    }
+            List<Product> products = new List<Product>()
+            {
+                new Product { ProductID = 1, ProductName = "Laptop", Price = 55000 },
+                new Product { ProductID = 2, ProductName = "Mouse", Price = 600 },
+                new Product { ProductID = 3, ProductName = "Keyboard", Price = 1500 },
+                new Product { ProductID = 4, ProductName = "Monitor", Price = 12000 }
+            };
 
-    Session["Cart"] = cart;
+            Product product = products.FirstOrDefault(x => x.ProductID == id);
 
-    return RedirectToAction("Index", "Home");
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+
+            List<CartItem> cart;
+
+            if (Session["Cart"] == null)
+            {
+                cart = new List<CartItem>();
+            }
+            else
+            {
+                cart = (List<CartItem>)Session["Cart"];
+            }
+
+            CartItem item = cart.FirstOrDefault(
+                x => x.Product.ProductID == id);
+
+            if (item == null)
+            {
+                cart.Add(new CartItem()
+                {
+                    Product = product,
+                    Quantity = 1
+                });
+            }
+            else
+            {
+                item.Quantity++;
+            }
+
+            Session["Cart"] = cart;
+
+            return RedirectToAction("Index", "Cart");
+        }
+
+        public ActionResult Index()
+        {
+            List<CartItem> cart;
+
+            if (Session["Cart"] == null)
+            {
+                cart = new List<CartItem>();
+            }
+            else
+            {
+                cart = (List<CartItem>)Session["Cart"];
+            }
+
+            return View(cart);
+        }
+    }
 }
-
-This adds the selected product to the session cart. Adding the same product again increases its quantity. 
-Step 12 — Add Cart Index Action
-Below AddToCart(), add:
-public ActionResult Index()
-{
-    List<CartItem> cart;
-
-    if (Session["Cart"] == null)
-    {
-        cart = new List<CartItem>();
-    }
-    else
-    {
-        cart = (List<CartItem>)Session["Cart"];
-    }
-
-    return View(cart);
-}
-
-Step 13 — Create Cart View
-Right-click the Index() action and select:
-Add View
-
-Use:
-View Name: Index
-Template: Empty
-
 Click Add.
 Step 14 — Display Cart
 Use the following in the Cart Index.cshtml:
-@model IEnumerable<ShoppingCartApp.Models.CartItem>
+@model IEnumerable<ShoppingCartApp.Models.Product>
 
-<h2>Shopping Cart</h2>
+<h2>Products</h2>
 
 <table class="table table-bordered">
     <tr>
         <th>Product</th>
         <th>Price</th>
-        <th>Quantity</th>
-        <th>Total</th>
+        <th>Action</th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var product in Model)
     {
         <tr>
-            <td>@item.Product.ProductName</td>
-            <td>@item.Product.Price</td>
-            <td>@item.Quantity</td>
-            <td>@(item.Product.Price * item.Quantity)</td>
+            <td>@product.ProductName</td>
+            <td>@product.Price</td>
+            <td>
+                @Html.ActionLink(
+                    "Add to Cart",
+                    "AddToCart",
+                    "Cart",
+                    new { id = product.ProductID },
+                    null
+                )
+            </td>
         </tr>
     }
 </table>
-
-<h3>
-    Grand Total:
-    @Model.Sum(x => x.Product.Price * x.Quantity)
-</h3>
 
 Step 15 — Add Cart Link
 Open:
@@ -262,12 +262,21 @@ Views
 → Shared
 → _Layout.cshtml
 
-Inside the navigation menu, add:
-<li>
-    @Html.ActionLink("Cart", "Index", "Cart")
-</li>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error</title>
+</head>
+<body>
+    <hgroup>
+        <h1>Error.</h1>
+        <h2>An error occurred while processing your request.</h2>
+    </hgroup>
+</body>
+</html>
 
-    Practical 4(1)
+    
 Step 16 — Run Application
 Press:
 F5
